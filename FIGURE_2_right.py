@@ -39,7 +39,7 @@ FATOL = 1e-9
 
 save = True
 experimental_points = True
-width = 1.0 * 458.63788
+width = 4/5 * 1.0 * 458.63788
 # width = 398.3386
 random_number = np.random.randint(100)
 
@@ -58,7 +58,7 @@ tuple_size = pu.set_size(width, fraction=0.50)
 fig, ax = plt.subplots(
     1, 1, figsize=(multiplier * tuple_size[0], height_multiplier * multiplier * tuple_size[0])
 )
-fig.subplots_adjust(left=0.16)
+fig.subplots_adjust(left=0.3)
 fig.subplots_adjust(bottom=0.16)
 fig.subplots_adjust(top=0.97)
 fig.subplots_adjust(right=0.97)
@@ -428,7 +428,7 @@ if save:
         "FIGURE_2_center",
     )
 
-plt.show()
+# plt.show()
 
 # these are the data for the figure
 # unbounded
@@ -446,7 +446,7 @@ tuple_size = pu.set_size(width, fraction=0.50)
 fig, ax = plt.subplots(
     1, 1, figsize=(multiplier * tuple_size[0], height_multiplier * multiplier * tuple_size[0])
 )
-fig.subplots_adjust(left=0.16)
+fig.subplots_adjust(left=0.3)
 fig.subplots_adjust(bottom=0.16)
 fig.subplots_adjust(top=0.97)
 fig.subplots_adjust(right=0.97)
@@ -471,7 +471,7 @@ xs = np.linspace(0.0, 0.007, 30)
 ax.plot(xs, fun(xs, *popt), label="Linear Fit", linestyle="dashed", color="k")
 ax.legend()
 
-# ax.set_ylabel(r"$E_{\text{gen}} - E_{\text{gen}}^{\text{BO}}$", labelpad=0.0)
+ax.set_ylabel(r"$E_{\text{gen}}^{\rm Huber} - E_{\text{gen}}^{\text{BO}}$", labelpad=0.0)
 ax.set_xlabel(r"$\epsilon$", labelpad=2.0)
 # ax.set_xscale("log")
 # ax.set_yscale("log")
@@ -488,9 +488,7 @@ ax.tick_params(axis="x", pad=2.0)
 if save:
     pu.save_plot(
         fig,
-        "sweep_eps_scaling_fixed_delta_{:.2f}_beta_{:.2f}_alpha_cut_{:.2f}_delta_small_{:.2f}".format(
-            delta_large, beta, alpha_cut, delta_small
-        ),
+        "FIGURE_2_fit_huber_log",
     )
 
-plt.show()
+# plt.show()
