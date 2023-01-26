@@ -117,7 +117,7 @@ FATOL = 1e-10
 
 save = True
 experimental_points = True
-width = 1.0 * 458.63788
+width = 4/5 * 1.0 * 458.63788
 
 delta_large = 5.0
 beta = 0.0
@@ -131,7 +131,7 @@ tuple_size = pu.set_size(width, fraction=0.50)
 multiplier = 0.9
 second_multiplier = 0.7
 
-fig, ax = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],multiplier*tuple_size[0]))
+fig, ax = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],3/4 * multiplier*tuple_size[0]))
 fig.subplots_adjust(left=0.16)
 fig.subplots_adjust(bottom=0.16)
 fig.subplots_adjust(top=0.97)
@@ -389,7 +389,7 @@ ax.axhline(
 ax.set_xscale("log")
 ax.set_yscale("log")
 ax.set_xlim([0.1, 10000])
-ax.set_ylim([0.01, 1.3])
+ax.set_ylim([0.005, 1.9])
 # ax.legend(loc="upper right", handlelength=1.0)
 
 ax.tick_params(axis="y", pad=2.0)
@@ -401,11 +401,11 @@ if save:
         "FIGURE_1_center",
     )
 
-plt.show()
+# plt.show()
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
-fig_2, ax_2 = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],second_multiplier*multiplier*tuple_size[0]))
+fig_2, ax_2 = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],second_multiplier*multiplier*tuple_size[1]))
 # important
 fig_2.subplots_adjust(left=0.16)
 fig_2.subplots_adjust(bottom=0.3)
@@ -443,9 +443,9 @@ for idx in range(len(alphas_L2)):
     if lambdas_L2[idx] >= small_value:
         final_idx_L2 = idx+1
 
-ax_2.axvline(x=alphas_L2[final_idx_L2], ymin=0, ymax=1, linestyle="dashed", color='tab:blue', alpha=0.75)
-ax_2.axvline(x=alphas_L2[final_idx_L1], ymin=0, ymax=1, linestyle="dashed", color='tab:green', alpha=0.75)
-ax_2.axvline(x=alphas_L2[final_idx_Hub], ymin=0, ymax=1, linestyle="dashed", color='tab:orange', alpha=0.75)
+# ax_2.axvline(x=alphas_L2[final_idx_L2], ymin=0, ymax=1, linestyle="dashed", color='tab:blue', alpha=0.75)
+# ax_2.axvline(x=alphas_L2[final_idx_L1], ymin=0, ymax=1, linestyle="dashed", color='tab:green', alpha=0.75)
+# ax_2.axvline(x=alphas_L2[final_idx_Hub], ymin=0, ymax=1, linestyle="dashed", color='tab:orange', alpha=0.75)
 
 ax_2.tick_params(axis="y", pad=2.0)
 ax_2.tick_params(axis="x", pad=2.0)
@@ -456,4 +456,4 @@ if save:
         "FIGURE_1_center_parameters",
     )
 
-plt.show()
+# plt.show()

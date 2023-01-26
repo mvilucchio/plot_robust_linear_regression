@@ -283,7 +283,7 @@ if save:
         "FIGURE_1_left",
     )
 
-plt.show()
+# plt.show()
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
@@ -320,4 +320,4 @@ if save:
         "FIGURE_1_left_parameters",
     )
 
-plt.show()
+# plt.show()
