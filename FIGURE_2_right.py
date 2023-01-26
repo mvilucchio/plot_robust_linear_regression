@@ -460,12 +460,11 @@ ax.plot(
     color="tab:orange",
 )
 
+# fit data
 popt = [8.01741623e-03, -2.31223073e-08]
-
 
 def fun(x, a, b):
     return x * a + b
-
 
 xs = np.linspace(0.0, 0.007, 30)
 ax.plot(xs, fun(xs, *popt), label="Linear Fit", linestyle="dashed", color="k")
