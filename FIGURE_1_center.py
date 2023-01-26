@@ -255,25 +255,27 @@ ax.plot(
     color="tab:red"
 )
 
-dat_l2_hub = np.genfromtxt(
+dat = np.genfromtxt(
     "./data/FIGURE_1_data_numerics_uncorrelated_bounded.csv",
     skip_header=1,
     delimiter=",",
 )
-alph_num = dat_l2_hub[:, 0]
-err_mean_l2 = dat_l2_hub[:, 1]
-err_std_l2 = dat_l2_hub[:, 2]
-err_mean_hub = dat_l2_hub[:, 3]
-err_std_hub = dat_l2_hub[:, 4]
+alph_num = dat[:, 0]
+err_mean_l2 = dat[:, 1]
+err_std_l2 = dat[:, 2]
+err_mean_l1 = dat[:, 3]
+err_std_l1 = dat[:, 4]
+err_mean_hub = dat[:, 5]
+err_std_hub = dat[:, 6]
 
-dat_l1 = np.genfromtxt(
-    "./data/GOOD_beta_0.0_l1.csv",
-    skip_header=1,
-    delimiter=",",
-)
-alpha_l1 = dat_l1[:, 0]
-err_mean_l1 = dat_l1[:, 1]
-err_std_l1 = dat_l1[:, 2]
+# dat_l1 = np.genfromtxt(
+#     "./data/GOOD_beta_0.0_l1.csv",
+#     skip_header=1,
+#     delimiter=",",
+# )
+# alpha_l1 = dat_l1[:, 0]
+# err_mean_l1 = dat_l1[:, 1]
+# err_std_l1 = dat_l1[:, 2]
 
 new_err_l1 = []
 new_err_l2 = []
@@ -316,7 +318,7 @@ ax.plot(
     # linewidth=0.5
 )
 ax.errorbar(
-    alpha_l1,
+    alph_num,
     err_mean_l1,
     yerr=new_err_l1,
     color="tab:green",
@@ -396,9 +398,7 @@ ax.tick_params(axis="x", pad=2.0)
 if save:
     pu.save_plot(
         fig,
-        "presentation_total_optimal_confronts_fixed_delta_{:.2f}_beta_{:.2f}_delta_small_{:.2f}_eps_{:.2f}".format(
-            delta_large, beta, delta_small, p
-        ),
+        "FIGURE_1_center",
     )
 
 plt.show()
@@ -453,9 +453,7 @@ ax_2.tick_params(axis="x", pad=2.0)
 if save:
     pu.save_plot(
         fig_2,
-        "presentation_half_size_a_opt_total_optimal_confronts_fixed_delta_{:.2f}_beta_{:.2f}_delta_small_{:.2f}_eps_{:.2f}".format(
-            delta_large, beta, delta_small, p
-        ),
+        "FIGURE_1_center_parameters",
     )
 
 plt.show()
