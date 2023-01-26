@@ -155,7 +155,7 @@ second_multiplier = 0.7
 # these are the data for the figure
 
 data_fp = np.genfromtxt(
-    "./data/single_param_uncorrelated_unbounded_fig_1.csv",
+    "./data/FIGURE_1_data_uncorrelated_unbounded.csv",
     delimiter=",",
     skip_header=1,
 )
@@ -191,33 +191,60 @@ ax.plot(alphas_l2, errors_Huber, label="Huber", color="tab:orange", linestyle="s
 ax.plot(alphas_l2, errors_l2, label=r"$\ell_2$", color="tab:blue", linestyle="solid")
 ax.plot(alphas_l2, errors_l1, label=r"$\ell_1$", color="tab:green", linestyle="solid")
 
-dat_l1 = np.genfromtxt(
-    "./data/beta_0.0_no_cuttoff.csv",
+data = np.genfromtxt(
+    "./data/FIGURE_1_data_numerics_uncorrelated_unbounded.csv",
     skip_header=1,
     delimiter=",",
 )
-alph_num = dat_l1[:, 0]
-err_mean_hub = dat_l1[:, 1]
-err_std_hub = dat_l1[:, 2]
+alph_num = data[:, 0]
+err_mean_l2= data[:, 1]
+err_std_l2 = data[:, 2]
+err_mean_l1 = data[:, 3]
+err_std_l1 = data[:, 4]
+err_mean_hub = data[:, 5]
+err_std_hub = data[:, 6]
 
 new_err_l1 = []
 new_err_l2 = []
 new_err_hub = []
 
-# for idx, e in enumerate(err_std_l2):
-#     new_err_l2.append(e / np.sqrt(10))
+for idx, e in enumerate(err_std_l2):
+    new_err_l2.append(e / np.sqrt(10))
 
-# for idx, e in enumerate(err_std_l1):
-#     new_err_l1.append(e / np.sqrt(10))
+for idx, e in enumerate(err_std_l1):
+    new_err_l1.append(e / np.sqrt(10))
 
-# for idx, e in enumerate(err_std_hub):
-#     new_err_hub.append(e / np.sqrt(10))
+for idx, e in enumerate(err_std_hub):
+    new_err_hub.append(e / np.sqrt(10))
 
-# new_err_l2 = np.array(new_err_l2)
-# new_err_l1 = np.array(new_err_l1)
-# new_err_hub = np.array(new_err_hub)
-new_err_hub = err_std_hub
+new_err_l2 = np.array(new_err_l2)
+new_err_l1 = np.array(new_err_l1)
+new_err_hub = np.array(new_err_hub)
 
+ax.errorbar(
+    alph_num,
+    err_mean_l2,
+    yerr=new_err_l2,
+    color="tab:blue",
+    linestyle="",
+    elinewidth=0.75,
+    markerfacecolor="none",
+    markeredgecolor="tab:blue",
+    marker="o",
+    markersize=1.0,
+)
+ax.errorbar(
+    alph_num,
+    err_mean_l1,
+    yerr=new_err_l1,
+    color="tab:green",
+    linestyle="",
+    elinewidth=0.75,
+    markerfacecolor="none",
+    markeredgecolor="tab:green",
+    marker="o",
+    markersize=1.0,
+)
 ax.errorbar(
     alph_num,
     err_mean_hub,
@@ -254,14 +281,10 @@ ax.tick_params(axis="x", pad=2.0)
 if save:
     pu.save_plot(
         fig,
-        "presentation_negative_lambda_total_optimal_confronts_fixed_delta_{:.2f}_beta_{:.2f}_delta_small_{:.2f}_eps_{:.2f}".format(
-            delta_large, beta, delta_small, p
-        ),
+        "FIGURE_1_right",
     )
 
 plt.show()
-
-# np.savetxt("./data/negative_vals_huber.csv", np.vstack((alphas_Huber,errors_Huber,lambdas_Huber, huber_params)).T, delimiter=',', header="alpha,err_hub,lambda_hub,a_hub")
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
@@ -323,9 +346,7 @@ ax_2.tick_params(axis="x", pad=2.0)
 if save:
     pu.save_plot(
         fig_2,
-        "presentation_a_opt_total_optimal_confronts_fixed_delta_{:.2f}_beta_{:.2f}_delta_small_{:.2f}_eps_{:.2f}".format(
-            delta_large, beta, delta_small, p
-        ),
+        "FIGURE_1_right_parameters",
     )
 
 plt.show()
