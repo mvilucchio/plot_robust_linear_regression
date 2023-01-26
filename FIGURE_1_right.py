@@ -262,7 +262,7 @@ ax.errorbar(
 # ax.set_xlabel(r"$\alpha$", labelpad=0.0)
 ax.set_xscale("log")
 ax.set_yscale("log")
-ax.set_xlim([10, 1000]) 
+ax.set_xlim([0.1, 1000]) 
 # ax .set_xlim([10, 30])
 # ax .set_ylim([0.0, 1.7])
 ax.grid(zorder=20)
@@ -289,7 +289,7 @@ plt.show()
 tuple_size = pu.set_size(width, fraction=0.50)
 
 fig_2, ax_2 = plt.subplots(
-    1, 1, figsize=(multiplier * tuple_size[0], second_multiplier * multiplier * tuple_size[0])
+    1, 1, figsize=(multiplier * tuple_size[0], second_multiplier * multiplier * tuple_size[1])
 )
 # fig_2, ax_2 = plt.subplots(1, 1, figsize=tuple_size)
 # important
@@ -327,7 +327,7 @@ ax_2.plot(
 # ax_2.set_xlabel(r"$\alpha$", labelpad=0.0)
 ax_2.set_xscale("log")
 # ax_2.set_yscale("log")
-# ax_2.set_xlim([10, 1000])
+ax_2.set_xlim([0.1, 1000])
 # ax_2.set_xlim([-10, 10])
 ax_2.set_ylim([-10,10])
 ax_2.grid(zorder=20)
