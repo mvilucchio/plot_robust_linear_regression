@@ -342,7 +342,7 @@ LOWER_BOUND_AX = 1e-4
 # these are the data for the figure
 # unbounded
 data_fp = np.genfromtxt(
-    "./data/FIGURE_2_bounded.csv",
+    "./data/FIGURE_2_unbounded.csv",
     delimiter=",",
     skip_header=1,
 )
