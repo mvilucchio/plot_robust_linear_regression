@@ -2,7 +2,7 @@ import os
 import datetime as dt
 import matplotlib.pyplot as plt
 
-IMG_DIRECTORY = "./imgs" # "/Volumes/LaCie/final_imgs_hproblem/new3/new5"  #  "./imgs" #  #  # "/Volumes/LaCie/final_imgs_hproblem" #
+IMG_DIRECTORY = "./imgs"
 STYLES_DIRECTORY = "./src/mpl_styles"
 
 
@@ -16,8 +16,7 @@ def save_plot(fig, name, formats=["pdf"], date=True):
         fig.savefig(
             os.path.join(
                 IMG_DIRECTORY,
-                "{}".format(name) + "." + f,
-                # "{}".format(name) + "_" + now.strftime("%Y_%m_%d_%H_%M_%S") + "." + f,
+                "{}".format(name) + "." + f
             ),
             format=f,
         )

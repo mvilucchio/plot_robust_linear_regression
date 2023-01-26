@@ -481,9 +481,6 @@ ax.set_xlabel(r"$\epsilon$", labelpad=2.0)
 ax.tick_params(axis="y", pad=2.0)
 ax.tick_params(axis="x", pad=2.0)
 
-# ax.set_xticks([0.0001, 0.001, 0.01, 0.1, 0.5])
-# ax.set_xticklabels([r"$10^{-4}$", r"$10^{-3}$", r"$10^{-2}$", r"$10^{-1}$", r"$0.5$"])
-
 if save:
     pu.save_plot(
         fig,

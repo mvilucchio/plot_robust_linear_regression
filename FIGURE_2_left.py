@@ -40,7 +40,6 @@ FATOL = 1e-9
 save = True
 experimental_points = True
 width = 4/5 * 1.0 * 458.63788
-# width = 398.3386
 random_number = np.random.randint(100)
 
 alpha_cut = 10.0
@@ -236,107 +235,13 @@ LOWER_BOUND_AX = 1e-4
 #     bo_err[idx] = 1 - 2 * m + q
 #     # print("done bo {}".format(idx))
 
-# # epsilons = np.logspace(-5, -3, N)
-# l2_err_clipp = np.empty(len(epsilons))
-# l2_lambda_clipp = np.empty(len(epsilons))
-# l1_err_clipp = np.empty(len(epsilons))
-# l1_lambda_clipp = np.empty(len(epsilons))
-# huber_err_clipp = np.empty(len(epsilons))
-# hub_lambda_clipp = np.empty(len(epsilons))
-# a_hub_clipp = np.empty(len(epsilons))
-# bo_err_clipp = np.empty(len(epsilons))
-
-# SMALLEST_REG_PARAM = 1e-10
-# print("bounded")
-
-# previous_aopt_hub = 10
-# previous_rpopt_hub = 0.5
-# previous_rpopt_l2 = 0.5
-# previous_rpopt_l1 = 0.5
-# for idx, eps in enumerate(tqdm(epsilons)):
-#     # print(eps)
-#     while True:
-#         m = 0.89 * np.random.random() + 0.1
-#         q = 0.89 * np.random.random() + 0.1
-#         sigma = 0.89 * np.random.random() + 0.1
-#         if np.square(m) < q + delta_small * q and np.square(m) < q + delta_large * q:
-#             initial_condition = [m, q, sigma]
-#             break
-
-#     params = {
-#         "delta_small": delta_small,
-#         "delta_large": delta_large,
-#         "percentage": float(eps),
-#         "beta": beta,
-#     }
-
-#     l2_err_clipp[idx], l2_lambda_clipp[idx] = _find_optimal_reg_param_gen_error(
-#         alpha_cut,
-#         var_func_L2,
-#         var_hat_func_L2_decorrelated_noise,
-#         initial_condition,
-#         params,
-#         previous_rpopt_l2,
-#     )
-#     previous_rpopt_l2 = l2_lambda[idx]
-#     # print("done l2 {}".format(idx))
-
-#     l1_err_clipp[idx], l1_lambda_clipp[idx] = _find_optimal_reg_param_gen_error(
-#         alpha_cut,
-#         var_func_L2,
-#         var_hat_func_L1_decorrelated_noise,
-#         initial_condition,
-#         params,
-#         previous_rpopt_l1,
-#     )
-#     previous_rpopt_l1 = l1_lambda[idx]
-#     # print("done l1 {}".format(idx))
-
-#     if eps < 0.001:
-#         aaa = 10
-#     else:
-#         aaa = 1
-
-#     (
-#         huber_err_clipp[idx],
-#         hub_lambda_clipp[idx],
-#         a_hub_clipp[idx],
-#     ) = _find_optimal_reg_param_and_huber_parameter_gen_error(
-#         alpha_cut,
-#         var_hat_func_Huber_decorrelated_noise,
-#         initial_condition,
-#         params,
-#         [previous_rpopt_hub, previous_aopt_hub],
-#     )
-#     previous_rpopt_hub = hub_lambda[idx]
-#     previous_aopt_hub = a_hub[idx]
-
 # np.savetxt(
-#     "./data/sweep_epsilon_unbounded_figure_2_forward_lin.csv",
+#     "./data/FIGURE_2_unbounded.csv",
 #     np.vstack(
 #         (epsilons, l2_err, l2_lambda, l1_err, l1_lambda, huber_err, hub_lambda, a_hub, bo_err)
 #     ).T,
 #     delimiter=",",
 #     header="# alphas_L2,errors_L2,lambdas_L2,errors_L1,lambdas_L1,errors_Huber,lambdas_Huber,huber_params,errors_BO",
-# )
-
-# np.savetxt(
-#     "./data/sweep_epsilon_bounded_figure_2_2.csv",
-#     np.vstack(
-#         (
-#             epsilons,
-#             l2_err_clipp,
-#             l2_lambda_clipp,
-#             l1_err_clipp,
-#             l1_lambda_clipp,
-#             huber_err_clipp,
-#             hub_lambda_clipp,
-#             a_hub_clipp,
-#             bo_err_clipp,
-#         )
-#     ).T,
-#     delimiter=",",
-#     header="# alphas_L2, errors_L2, lambdas_L2, errors_L1, lambdas_L1, errors_Huber,lambdas_Huber, huber_params, errors_BO",
 # )
 
 # these are the data for the figure
@@ -357,35 +262,10 @@ hub_lambda = data_fp[:, 6]
 a_hub = data_fp[:, 7]
 bo_err = data_fp[:, 8]
 
-# # these are the data for the figure
-# # bounded
-# data_fp = np.genfromtxt(
-#     "./data/sweep_epsilon_bounded_figure_good_log.csv",
-#     delimiter=",",
-#     skip_header=1,
-# )
-
-# epsilons = data_fp[:, 0]
-# l2_err_clipp = data_fp[:, 1]
-# l2_lambda_clipp = data_fp[:, 2]
-# l1_err_clipp = data_fp[:, 3]
-# l1_lambda_clipp = data_fp[:, 4]
-# huber_err_clipp = data_fp[:, 5]
-# hub_lambda_clipp = data_fp[:, 6]
-# a_hub_clipp = data_fp[:, 7]
-# bo_err_clipp = data_fp[:, 8]
-
 ax.plot(epsilons, l2_err, label=r"$\ell_2$", color="tab:blue")
 ax.plot(epsilons, l1_err, label=r"$\ell_1$", color="tab:green")
 ax.plot(epsilons, huber_err, label="Huber", color="tab:orange")
 ax.plot(epsilons, bo_err, label="BO", color="tab:red")
-
-# ax.plot(epsilons, l2_err_clipp - bo_err_clipp, label=r"$\ell_2$ clipp.", color="tab:blue")
-# ax.plot(epsilons, l1_err_clipp - bo_err_clipp, label=r"$\ell_1$ clipp.", color="tab:green")
-# ax.plot(epsilons, huber_err_clipp - bo_err_clipp, label="Huber clipp.", color="tab:orange")
-
-# -------------------
-# to make the triangle
 
 ax.set_ylabel(r"$E_{\text{gen}}$", labelpad=2.0)
 ax.set_xlabel(r"$\epsilon$", labelpad=2.0)
@@ -398,9 +278,6 @@ ax.set_xlim([LOWER_BOUND_AX, UPPER_BOUND_AX])
 ax.tick_params(axis="y", pad=2.0)
 ax.tick_params(axis="x", pad=2.0)
 
-# ax.set_xticks([0.0001, 0.001, 0.01, 0.1, 0.5])
-# ax.set_xticklabels([r"$10^{-4}$", r"$10^{-3}$", r"$10^{-2}$", r"$10^{-1}$", r"$0.5$"])
-
 if save:
     pu.save_plot(
         fig,
@@ -408,7 +285,6 @@ if save:
     )
 
 # plt.show()
-
 
 tuple_size = pu.set_size(width, fraction=0.50)
 

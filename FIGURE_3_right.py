@@ -146,17 +146,10 @@ difference_hub_l2 = np.empty((N,N))
 numerics_new = False
 if numerics_new:
     for jdx, eps in enumerate(epsilons):
-        # if jdx == 0:
         previous_aopt_hub = 1.0
         previous_rpopt_hub = 0.5
         previous_rpopt_l2 = 0.5
         previous_rpopt_l1 = 0.5
-        # else:
-        #     print("aa")
-        #     previous_aopt_hub = a_hub[jdx - 1, N - 1]
-        #     previous_rpopt_hub = hub_lambda[jdx - 1, N - 1],
-        #     previous_rpopt_l2 = l2_lambda[jdx - 1, N - 1]
-        #     # previous_rpopt_l1 = l1_lambda[jdx-1,N - 1]
         for idx, delta_large in enumerate(delta_larges[::-1]):
             while True:
                 m = 0.89 * np.random.random() + 0.1
@@ -200,13 +193,6 @@ if numerics_new:
             print("done hub {}".format(jdx,N - idx - 1))
 
             difference_hub_l2[jdx,N - idx - 1] = l2_err[jdx,N - idx - 1] - huber_err[jdx,N - idx - 1]
-        
-        # if eps >= 0.003:
-        #     plt.plot(delta_larges, difference_hub_l2[jdx,:])
-        #     plt.xscale('log')
-        #     plt.yscale('log')
-        #     plt.show()
-        #     break
 
     np.savetxt(
         "./data/FIGURE_3_right_epsilons_delta_out.csv",
@@ -234,13 +220,8 @@ data_fp = np.genfromtxt(
     skip_header=1,
 )
 
-
 epsilons = data_fp[:, 0]
 delta_larges = data_fp[:, 1]
-
-print(np.shape(epsilons))
-print(np.shape(delta_larges))
-
 
 # data_fp = np.genfromtxt(
 #     "./data/FIGURE_3_unbounded.csv",
@@ -300,9 +281,6 @@ ax.set_ylim([1, None])
 # ax.legend(ncol=2, handlelength=1.0)
 
 ax.axvline(x=0.3, ymin=0, ymax=1, color = "tab:red")
-
-# ax.tick_params(axis="y", pad=2.0)
-# ax.tick_params(axis="x", pad=2.0)
 
 if save:
     pu.save_plot(

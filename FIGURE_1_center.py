@@ -268,15 +268,6 @@ err_std_l1 = dat[:, 4]
 err_mean_hub = dat[:, 5]
 err_std_hub = dat[:, 6]
 
-# dat_l1 = np.genfromtxt(
-#     "./data/GOOD_beta_0.0_l1.csv",
-#     skip_header=1,
-#     delimiter=",",
-# )
-# alpha_l1 = dat_l1[:, 0]
-# err_mean_l1 = dat_l1[:, 1]
-# err_std_l1 = dat_l1[:, 2]
-
 new_err_l1 = []
 new_err_l2 = []
 new_err_hub = []

@@ -273,8 +273,6 @@ for idx in range(len(alphas_l2)):
     if lambdas_Huber[idx] >= 1e-6:
         final_idx = idx
 
-# ax.axvline(x=alphas_Huber[final_idx], ymin=0, ymax=1, linestyle="dashed", color="k", alpha=0.75)
-
 ax.tick_params(axis="y", pad=2.0)
 ax.tick_params(axis="x", pad=2.0)
 
@@ -337,8 +335,6 @@ final_idx = 1
 for idx in range(len(alphas_l2)):
     if lambdas_Huber[idx] >= 1e-6:
         final_idx = idx
-
-# ax_2.axvline(x=alphas_Huber[final_idx], ymin=0, ymax=1, linestyle="dashed", color="k", alpha=0.75)
 
 ax_2.tick_params(axis="y", pad=2.0)
 ax_2.tick_params(axis="x", pad=2.0)

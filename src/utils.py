@@ -37,7 +37,7 @@ def _get_spaced_index(array, num_elems, max_val=100):
     return np.round(np.linspace(0, len(array[cond_array]) - 1, num_elems)).astype(int)
 
 
-DATA_FOLDER_PATH = "./" # "/Volumes/LaCie/final_data_hproblem/"  # "/Users/matteovilucchio/Documents/ENS/HProblem/robust_linear_regression/data"  # "./data"  # "/Volumes/LaCie/final_data_hproblem" #  # "/Volumes/LaCie/final_data_hproblem" #  #  #
+DATA_FOLDER_PATH = "./"
 
 CSV_FOLDER_PATHS = [
     "./data/csv/experiments",

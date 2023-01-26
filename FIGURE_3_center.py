@@ -130,7 +130,7 @@ def _find_optimal_reg_param_and_huber_parameter_gen_error(
 
 
 # -------------------
-numerics = True
+numerics = False
 if numerics:
     N = 200
     # delta_larges = np.linspace(0.04, UPPER_BOUND, N)
@@ -180,16 +180,16 @@ if numerics:
         previous_rpopt_l2 = l2_lambda_ub[N - idx - 1]
         print("done l2 {}".format(N - idx - 1))
 
-        # l1_err[N - idx - 1], l1_lambda[N - idx - 1] = _find_optimal_reg_param_gen_error(
-        #     alpha_cut,
-        #     var_func_L2,
-        #     var_hat_func_L1_decorrelated_noise,
-        #     initial_condition,
-        #     params,
-        #     previous_rpopt_l1,
-        # )
-        # previous_rpopt_l1 = l1_lambda[N - idx - 1]
-        # print("done l1 {}".format(N - idx - 1))
+        l1_err_ub[N - idx - 1], l1_lambda_ub[N - idx - 1] = _find_optimal_reg_param_gen_error(
+            alpha_cut,
+            var_func_L2,
+            var_hat_func_L1_decorrelated_noise,
+            initial_condition,
+            params,
+            previous_rpopt_l1,
+        )
+        previous_rpopt_l1 = l1_lambda_ub[N - idx - 1]
+        print("done l1 {}".format(N - idx - 1))
 
         (
             huber_err_ub[N - idx - 1],
@@ -206,21 +206,21 @@ if numerics:
         previous_aopt_hub = a_hub_ub[N - idx - 1]
         print("done hub {}".format(N - idx - 1))
 
-        # pup = {
-        #     "delta_small": delta_small,
-        #     "delta_large": delta_large,
-        #     "percentage": float(eps),
-        #     "beta": beta,
-        # }
-        # m, q, sigma = fp._find_fixed_point(
-        #     alpha_cut,
-        #     var_func_BO,
-        #     var_hat_func_BO_num_decorrelated_noise,
-        #     1.0,
-        #     initial_condition,
-        #     pup,
-        # )
-        # bo_err[N - idx - 1] = 1 - 2 * m + q
+        pup = {
+            "delta_small": delta_small,
+            "delta_large": delta_large,
+            "percentage": float(eps),
+            "beta": beta,
+        }
+        m, q, sigma = fp._find_fixed_point(
+            alpha_cut,
+            var_func_BO,
+            var_hat_func_BO_num_decorrelated_noise,
+            1.0,
+            initial_condition,
+            pup,
+        )
+        bo_err_ub[N - idx - 1] = 1 - 2 * m + q
 
         print("done bo {}".format(N - idx - 1))
 
@@ -254,10 +254,10 @@ for idx, a_val in enumerate(a_hub_ub[::-1]):
     if a_val <= 8.0:
         index_phase_trans = len(delta_larges_ub) - 1 - idx
 
-ax.plot(delta_larges_ub, l2_err_ub - huber_err_ub, label=r"$\ell_2$", color="tab:blue")
-# ax.plot(delta_larges_ub, l1_err_ub, label=r"$\ell_1$", color="tab:green")
-# ax.plot(delta_larges_ub, huber_err_ub, label="Huber", color="tab:orange")
-# ax.plot(delta_larges_ub, bo_err_ub, label="BO", color="tab:red")
+ax.plot(delta_larges_ub, l2_err_ub, label=r"$\ell_2$", color="tab:blue")
+ax.plot(delta_larges_ub, l1_err_ub, label=r"$\ell_1$", color="tab:green")
+ax.plot(delta_larges_ub, huber_err_ub, label="Huber", color="tab:orange")
+ax.plot(delta_larges_ub, bo_err_ub, label="BO", color="tab:red")
 
 ax.axvline(x=delta_larges_ub[index_phase_trans], ymin=0.0, ymax=1.0, color="k", linestyle="dashed", alpha=0.75)
 
