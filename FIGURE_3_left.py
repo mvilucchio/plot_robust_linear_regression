@@ -38,7 +38,7 @@ XATOL = 1e-9
 FATOL = 1e-9
 
 save = True
-width = 1.0 * 458.63788
+width = 4/5 * 1.0 * 458.63788
 
 alpha_cut = 10.0
 delta_small = 1.0
@@ -54,7 +54,7 @@ tuple_size = pu.set_size(width, fraction=0.50)
 multiplier = 0.9
 second_multiplier = 0.7
 
-fig, ax = plt.subplots(1, 1, figsize=(tuple_size[0], tuple_size[0]))
+fig, ax = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0], 1/2 * multiplier*tuple_size[0]))
 fig.subplots_adjust(left=0.16)
 fig.subplots_adjust(bottom=0.16)
 fig.subplots_adjust(top=0.97)
@@ -295,14 +295,14 @@ if save:
         "FIGURE_3_left",
     )
 
-plt.show()
+# plt.show()
 
 # ------------------------
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
 fig_2, ax_2 = plt.subplots(
-    1, 1, figsize=(multiplier * tuple_size[0], second_multiplier * multiplier * tuple_size[0])
+    1, 1, figsize=(multiplier * tuple_size[0], second_multiplier * multiplier * tuple_size[1])
 )
 fig_2.subplots_adjust(left=0.16)
 fig_2.subplots_adjust(bottom=0.16)
@@ -332,4 +332,4 @@ if save:
         "FIGURE_3_left_parameters",
     )
 
-plt.show()
+# plt.show()
