@@ -39,7 +39,7 @@ FATOL = 1e-9
 
 save = True
 experimental_points = True
-width = 1.0 * 458.63788
+width = 4/5 * 1.0 * 458.63788
 # width = 398.3386
 random_number = np.random.randint(100)
 
@@ -55,7 +55,7 @@ second_multiplier = 0.7
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
-fig, ax = plt.subplots(1, 1, figsize=(multiplier * tuple_size[0], multiplier * tuple_size[0]))
+fig, ax = plt.subplots(1, 1, figsize=(multiplier * tuple_size[0], 3/4 * multiplier * tuple_size[0]))
 fig.subplots_adjust(left=0.16)
 fig.subplots_adjust(bottom=0.16)
 fig.subplots_adjust(top=0.97)
@@ -378,7 +378,7 @@ bo_err = data_fp[:, 8]
 ax.plot(epsilons, l2_err, label=r"$\ell_2$", color="tab:blue")
 ax.plot(epsilons, l1_err, label=r"$\ell_1$", color="tab:green")
 ax.plot(epsilons, huber_err, label="Huber", color="tab:orange")
-ax.plot(epsilons, bo_err, label="BO")
+ax.plot(epsilons, bo_err, label="BO", color="tab:red")
 
 # ax.plot(epsilons, l2_err_clipp - bo_err_clipp, label=r"$\ell_2$ clipp.", color="tab:blue")
 # ax.plot(epsilons, l1_err_clipp - bo_err_clipp, label=r"$\ell_1$ clipp.", color="tab:green")
@@ -407,13 +407,13 @@ if save:
         "FIGURE_2_left",
     )
 
-plt.show()
+# plt.show()
 
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
 fig, ax = plt.subplots(
-    1, 1, figsize=(multiplier * tuple_size[0], multiplier * second_multiplier * tuple_size[0])
+    1, 1, figsize=(multiplier * tuple_size[0], multiplier * second_multiplier * tuple_size[1])
 )
 fig.subplots_adjust(left=0.16)
 fig.subplots_adjust(bottom=0.16)
@@ -433,8 +433,8 @@ ax.set_xlim([LOWER_BOUND_AX, UPPER_BOUND_AX])
 # ax.set_ylim([-1, 2])
 # ax.legend(ncol=2, handlelength=1.0)
 
-ax.tick_params(axis="y", pad=2.0)
-ax.tick_params(axis="x", pad=2.0)
+ax.tick_params(axis="y", pad=3.0)
+ax.tick_params(axis="x", pad=3.0)
 
 ax.set_xticks([0.0001, 0.001, 0.01, 0.1, 0.5])
 ax.set_xticklabels([r"$10^{-4}$", r"$10^{-3}$", r"$10^{-2}$", r"$10^{-1}$", r"$0.5$"])
@@ -445,4 +445,4 @@ if save:
         "FIGURE_2_left_parameters",
     )
 
-plt.show()
+# plt.show()
