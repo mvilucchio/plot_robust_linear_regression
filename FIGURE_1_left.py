@@ -50,7 +50,7 @@ FATOL = 1e-8
 
 save = True
 experimental_points = True
-width = 1.0 * 458.63788
+width = 4/5 * 1.0 * 458.63788
 
 delta_large = 5.0
 beta = 1.0
@@ -64,7 +64,7 @@ tuple_size = pu.set_size(width, fraction=0.50)
 multiplier = 0.9
 second_multiplier = 0.7
 
-fig, ax = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],multiplier*tuple_size[0]))
+fig, ax = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],3/4 * multiplier*tuple_size[0]))
 fig.subplots_adjust(left=0.16)
 fig.subplots_adjust(bottom=0.16)
 fig.subplots_adjust(top=0.97)

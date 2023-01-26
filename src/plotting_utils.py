@@ -16,7 +16,8 @@ def save_plot(fig, name, formats=["pdf"], date=True):
         fig.savefig(
             os.path.join(
                 IMG_DIRECTORY,
-                "{}".format(name) + "_" + now.strftime("%Y_%m_%d_%H_%M_%S") + "." + f,
+                "{}".format(name) + "." + f,
+                # "{}".format(name) + "_" + now.strftime("%Y_%m_%d_%H_%M_%S") + "." + f,
             ),
             format=f,
         )
