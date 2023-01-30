@@ -31,7 +31,7 @@ from src.fpeqs_Huber import (
     var_hat_func_Huber_decorrelated_noise,
 )
 
-SMALLEST_REG_PARAM = 1e-10
+SMALLEST_REG_PARAM = None
 SMALLEST_HUBER_PARAM = 1e-8
 MAX_ITER = 2500
 XATOL = 1e-9
@@ -42,7 +42,7 @@ width = 4/5 * 1.0 * 458.63788
 
 alpha_cut = 10.0
 delta_small = 1.0
-beta = 0.0
+beta = 1.0
 eps = 0.3
 UPPER_BOUND = 100.0
 LOWER_BOUND = 0.01
@@ -224,7 +224,7 @@ def _find_optimal_reg_param_and_huber_parameter_gen_error(
 #     print("done bo {}".format(N - idx - 1))
 
 # np.savetxt(
-#     "./data/sweep_delta_fig_4_bounded.csv",
+#     "./data/sweep_delta_fig_4_unbounded_beta_1.csv",
 #     np.vstack(
 #         (delta_larges, l2_err, l2_lambda, l1_err, l1_lambda, huber_err, hub_lambda, a_hub, bo_err)
 #     ).T,
@@ -233,7 +233,7 @@ def _find_optimal_reg_param_and_huber_parameter_gen_error(
 # )
 
 # data_fp = np.genfromtxt(
-#     "./data/sweep_delta_fig_4_bounded.csv",
+#     "./data/sweep_delta_fig_4_bounded_beta_1.csv",
 #     delimiter=",",
 #     skip_header=1,
 # )
@@ -249,7 +249,7 @@ def _find_optimal_reg_param_and_huber_parameter_gen_error(
 # bo_err = data_fp[:, 8]
 
 data_fp = np.genfromtxt(
-    "./data/FIGURE_3_unbounded.csv",
+    "./data/sweep_delta_fig_4_unbounded_beta_1.csv",
     delimiter=",",
     skip_header=1,
 )
@@ -282,9 +282,9 @@ ax.set_ylabel(r"$E_{\text{gen}}$", labelpad=0.0)
 ax.set_xlabel(r"$\Delta_\text{\tiny{OUT}}$", labelpad=2.0)
 ax.set_xscale("log")
 ax.set_yscale("log")
-ax.set_xlim([LOWER_BOUND, UPPER_BOUND])
-ax.set_ylim([0.1, 1.3])
-# ax.legend(ncol=2, handlelength=1.0)
+# ax.set_xlim([LOWER_BOUND, UPPER_BOUND])
+# ax.set_ylim([0.1, 1.3])
+ax.legend(ncol=2, handlelength=1.0)
 
 ax.tick_params(axis="y", pad=2.0)
 ax.tick_params(axis="x", pad=2.0)
@@ -292,10 +292,10 @@ ax.tick_params(axis="x", pad=2.0)
 if save:
     pu.save_plot(
         fig,
-        "FIGURE_3_left",
+        "FIGURE_3_left_beta_1",
     )
 
-# plt.show()
+plt.show()
 
 # ------------------------
 
@@ -319,9 +319,9 @@ ax_2.axvline(x=delta_larges_ub[index_phase_trans], ymin=0.0, ymax=1.0, color="k"
 ax_2.set_xlabel(r"$\Delta_{\text{OUT}}$", labelpad=2.0)
 ax_2.set_xscale("log")
 # ax_2.set_yscale("log")
-ax_2.set_xlim([LOWER_BOUND, UPPER_BOUND])
-ax_2.set_ylim([-2, 6])
-# ax_2.legend(ncol=2, handlelength=1.0)
+# ax_2.set_xlim([LOWER_BOUND, UPPER_BOUND])
+# ax_2.set_ylim([-2, 6])
+ax_2.legend(ncol=2, handlelength=1.0)
 
 ax_2.tick_params(axis="y", pad=2.0)
 ax_2.tick_params(axis="x", pad=2.0)
@@ -329,7 +329,7 @@ ax_2.tick_params(axis="x", pad=2.0)
 if save:
     pu.save_plot(
         fig_2,
-        "FIGURE_3_left_parameters",
+        "FIGURE_3_left_parameters_beta_1",
     )
 
 plt.show()
