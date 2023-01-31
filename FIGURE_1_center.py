@@ -4,6 +4,7 @@ from src.utils import load_file
 import src.plotting_utils as pu
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from itertools import product
 from src.optimal_lambda import (
     optimal_lambda,
@@ -268,6 +269,15 @@ err_std_l1 = dat[:, 4]
 err_mean_hub = dat[:, 5]
 err_std_hub = dat[:, 6]
 
+# dat_l1 = np.genfromtxt(
+#     "./data/GOOD_beta_0.0_l1.csv",
+#     skip_header=1,
+#     delimiter=",",
+# )
+# alpha_l1 = dat_l1[:, 0]
+# err_mean_l1 = dat_l1[:, 1]
+# err_std_l1 = dat_l1[:, 2]
+
 new_err_l1 = []
 new_err_l2 = []
 new_err_hub = []
@@ -373,6 +383,22 @@ ax.axhline(
 )
 ax.axhline(
     y=np.abs(val_plateau_L1), xmin=0.0, xmax=1, linestyle="dashed", color="tab:green", alpha=0.75
+)
+
+# AMP_BO error points
+df = pd.read_csv(f"data/AMP_BO_eps_{p}_beta_{beta}_delta_large_{delta_large}_delta_small_{delta_small}.csv")
+ax.errorbar(
+    df["alpha"],
+    df["mean"],
+    yerr=df["std"],
+    color="tab:red",
+    linestyle="",
+    elinewidth=0.75,
+    markerfacecolor="none",
+    markeredgecolor="tab:red",
+    marker="o",
+    markersize=1.0,
+    zorder=10,
 )
 
 # ax.set_ylabel(r"$E_{\text{gen}}$", labelpad=2.0)

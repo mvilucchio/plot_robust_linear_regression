@@ -4,6 +4,7 @@ from src.utils import load_file
 import src.plotting_utils as pu
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from itertools import product
 from src.optimal_lambda import (
     no_parallel_optimal_lambda,
@@ -50,7 +51,7 @@ from src.fpeqs_Huber import (
 
 save = True
 experimental_points = True
-width = 4/5 * 1.0 * 458.63788
+width = 1.0 * 458.63788
 
 # originally for the simulations was 5.0
 delta_large = 5.0
@@ -175,7 +176,7 @@ pu.initialization_mpl()
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
-fig, ax = plt.subplots(1, 1, figsize=(multiplier * tuple_size[0], 3/4 * multiplier * tuple_size[0]))
+fig, ax = plt.subplots(1, 1, figsize=(multiplier * tuple_size[0], multiplier * tuple_size[0]))
 # fig, ax = plt.subplots(1, 1, figsize=tuple_size)
 
 # important
@@ -186,7 +187,7 @@ fig.subplots_adjust(right=0.97)
 fig.set_zorder(30)
 ax.set_zorder(30)
 
-# ax.plot(alphas_l2, errors_BO, label="BO", color="tab:red", linestyle="solid")
+ax.plot(alphas_l2, errors_BO, label="BO", color="tab:red", linestyle="solid")
 ax.plot(alphas_l2, errors_Huber, label="Huber", color="tab:orange", linestyle="solid")
 ax.plot(alphas_l2, errors_l2, label=r"$\ell_2$", color="tab:blue", linestyle="solid")
 ax.plot(alphas_l2, errors_l1, label=r"$\ell_1$", color="tab:green", linestyle="solid")
@@ -258,12 +259,27 @@ ax.errorbar(
     markersize=1.0,
 )
 
+# AMP_BO error points
+df = pd.read_csv(f"data/AMP_BO_eps_{p}_beta_{beta}_delta_large_{delta_large}_delta_small_{delta_small}.csv")
+ax.errorbar(
+    df["alpha"],
+    df["mean"],
+    yerr=df["std"],
+    color="tab:red",
+    linestyle="",
+    elinewidth=0.75,
+    markerfacecolor="none",
+    markeredgecolor="tab:red",
+    marker="o",
+    markersize=1.0,
+    zorder=10,
+)
 # ax.set_ylabel(r"$E_{\text{gen}}$", labelpad=2.0)
 # ax.set_xlabel(r"$\alpha$", labelpad=0.0)
 ax.set_xscale("log")
 ax.set_yscale("log")
 ax.set_xlim([0.1, 1000]) 
-ax.set_ylim([0.005, 1.9])
+# ax .set_xlim([10, 30])
 # ax .set_ylim([0.0, 1.7])
 ax.grid(zorder=20)
 # leg = ax.legend(loc="lower left", handlelength=1.0)
@@ -272,6 +288,8 @@ final_idx = 1
 for idx in range(len(alphas_l2)):
     if lambdas_Huber[idx] >= 1e-6:
         final_idx = idx
+
+# ax.axvline(x=alphas_Huber[final_idx], ymin=0, ymax=1, linestyle="dashed", color="k", alpha=0.75)
 
 ax.tick_params(axis="y", pad=2.0)
 ax.tick_params(axis="x", pad=2.0)
@@ -282,7 +300,7 @@ if save:
         "FIGURE_1_right",
     )
 
-# plt.show()
+plt.show()
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
@@ -292,7 +310,7 @@ fig_2, ax_2 = plt.subplots(
 # fig_2, ax_2 = plt.subplots(1, 1, figsize=tuple_size)
 # important
 fig_2.subplots_adjust(left=0.16)
-fig_2.subplots_adjust(bottom=0.3)
+fig_2.subplots_adjust(bottom=0.16)
 fig_2.subplots_adjust(top=0.97)
 fig_2.subplots_adjust(right=0.97)
 fig_2.set_zorder(30)
@@ -327,7 +345,7 @@ ax_2.set_xscale("log")
 # ax_2.set_yscale("log")
 ax_2.set_xlim([0.1, 1000])
 # ax_2.set_xlim([-10, 10])
-ax_2.set_ylim([-10,5])
+ax_2.set_ylim([-10,10])
 ax_2.grid(zorder=20)
 # leg = ax_2.legend(loc="lower left", handlelength=1.0)
 
@@ -335,6 +353,8 @@ final_idx = 1
 for idx in range(len(alphas_l2)):
     if lambdas_Huber[idx] >= 1e-6:
         final_idx = idx
+
+# ax_2.axvline(x=alphas_Huber[final_idx], ymin=0, ymax=1, linestyle="dashed", color="k", alpha=0.75)
 
 ax_2.tick_params(axis="y", pad=2.0)
 ax_2.tick_params(axis="x", pad=2.0)
@@ -345,4 +365,4 @@ if save:
         "FIGURE_1_right_parameters",
     )
 
-# plt.show()
+plt.show()

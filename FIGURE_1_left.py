@@ -42,6 +42,8 @@ from src.fpeqs_Huber import (
     var_hat_func_Huber_decorrelated_noise,
 )
 
+import pandas as pd
+
 SMALLEST_REG_PARAM = 1e-7
 SMALLEST_HUBER_PARAM = 1e-7
 MAX_ITER = 2500
@@ -171,6 +173,8 @@ lambdas_Huber = data_fp[:,6]
 huber_params = data_fp[:,7]
 errors_BO = data_fp[:,8]
 
+# alphas_BO, errors_BO = load_file(**BO_settings)
+
 dat_l2_hub = np.genfromtxt(
     "./data/FIGURE_1_data_numerics_correlated.csv",
     skip_header=1,
@@ -184,12 +188,23 @@ err_std_l1 = dat_l2_hub[:, 4]
 err_mean_hub = dat_l2_hub[:, 5]
 err_std_hub = dat_l2_hub[:, 6]
 
+# dat_l1 = np.genfromtxt(
+#     "./data/GOOD_beta_1.0_l1.csv", # "./data/numerics_sweep_alpha_just_l1_fixed_eps_0.30_beta_0.00_delta_large_5.00_delta_small_1.00_dim_500.00_bak.csv",
+#     skip_header=1,
+#     delimiter=",",
+#     # dtype="float",
+# )
+# alpha_l1 = dat_l1[:, 0]
+# err_mean_l1 = dat_l1[:, 1]
+# err_std_l1 = dat_l1[:, 2]
+
+
 ax.plot(
     alphas_L2,
     errors_L2,
     label=r"$\ell_2$",
     color="tab:blue",
-    zorder=3,
+    zorder=3,  # ,linewidth=1.0
 )
 ax.errorbar(
     alph_num,
@@ -211,6 +226,7 @@ ax.plot(
     label=r"$\ell_1$",
     color="tab:green",
     zorder=5
+    # linewidth=1.0
 )
 ax.errorbar(
     alph_num,
@@ -231,8 +247,8 @@ ax.plot(
     errors_Huber,
     label="Huber",
     color="tab:orange",
-    zorder=10,
-)
+    zorder=10,  # , linewidth=1.0
+)  # r"$\mathcal{L}_{a_{\text{\tiny{opt}}}}$",
 ax.errorbar(
     alph_num,
     err_mean_hub,
@@ -249,8 +265,25 @@ ax.errorbar(
 
 ax.plot(alphas_L2, errors_BO, label="BO", color="tab:red", linewidth=0.5, zorder=15)
 
+# AMP_BO error points
+df = pd.read_csv(f"data/AMP_BO_eps_{p}_beta_{beta}_delta_large_{delta_large}_delta_small_{delta_small}.csv")
+ax.errorbar(
+    df["alpha"],
+    df["mean"],
+    yerr=df["std"],
+    color="tab:red",
+    linestyle="",
+    elinewidth=0.75,
+    markerfacecolor="none",
+    markeredgecolor="tab:red",
+    marker="o",
+    markersize=1.0,
+    zorder=10,
+)
+
 
 # ax.set_ylabel(r"$E_{\text{gen}}$", labelpad=2.0)
+# ax.set_ylabel(r"$E_{\text{gen}}-E_{\text{gen}}^{\text{BO}}$")
 # ax.set_xlabel(r"$\alpha$", labelpad=2.0)
 ax.set_xscale("log")
 ax.set_yscale("log")
