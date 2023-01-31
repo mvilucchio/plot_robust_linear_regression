@@ -101,7 +101,7 @@ def var_hat_func_Huber_num_double_noise(
     return m_hat, q_hat, sigma_hat
 
 
-@njit(error_model="numpy", fastmath=True)
+# @njit(error_model="numpy", fastmath=True)
 def var_hat_func_Huber_decorrelated_noise(
     m, q, sigma, alpha, delta_small, delta_large, percentage, beta, a
 ):

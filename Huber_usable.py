@@ -7,6 +7,9 @@ from src.fpeqs import state_equations
 # BO simulation imports
 from src.numerics import measure_gen_decorrelated, find_coefficients_Huber, _find_numerical_mean_std
 
+# Hyperparameter optimisation imports
+from scipy.optimize import minimize
+
 def Huber_fixed_point(lambd, a, alpha, delta_small, delta_large, percentage, beta):
     """Given the parameters iterates the fixed point equations for L1. Returns the generalisation error.
 
@@ -65,6 +68,33 @@ def Huber_sim(d, lambd, a, alpha, delta_small, delta_large, percentage, beta, re
     return mean, std/np.sqrt(repetitions)
 
 
+
+def best_a_param_Huber(lambd, alpha, delta_small, delta_large, percentage, beta, initial_a):
+    XATOL = 1e-10
+    FATOL = 1e-10
+
+    def minimize_fun(a):
+        return Huber_fixed_point(lambd, a, alpha, delta_small, delta_large, percentage, beta)
+
+    obj = minimize(
+        minimize_fun,
+        x0=initial_a,
+        method="Nelder-Mead",
+        options={
+            "xatol": XATOL,
+            "fatol": FATOL,
+            "adaptive": True,
+        },
+    )
+
+    if obj.success:
+        E_opt = obj.fun
+        a_opt = obj.x
+        return E_opt, a_opt
+    else:
+        raise RuntimeError("Minima could not be found.")
+
+
 def main():
     lambd = 1.681086912923367427e+00
     a = 1.107195765398673704e+00
@@ -76,6 +106,9 @@ def main():
 
     E_FP = Huber_fixed_point(lambd, a, alpha, delta_small, delta_large, percentage, beta)
     print(f"E (fixed point): {E_FP}")
+
+    E_best = best_a_param_Huber(lambd, alpha, delta_small, delta_large, percentage, beta, initial_a=1)
+    print(f"E (best a): {E_best}")
 
     d = 1000
     E_Huber =  Huber_sim(d, lambd, a, alpha, delta_small, delta_large, percentage, beta, repetitions=10)
