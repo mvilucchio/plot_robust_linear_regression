@@ -79,6 +79,7 @@ def best_a_param_Huber(lambd, alpha, delta_small, delta_large, percentage, beta,
     obj = minimize(
         minimize_fun,
         x0=initial_a,
+        bounds=[(-1e-8,None)],
         method="Nelder-Mead",
         options={
             "xatol": XATOL,
