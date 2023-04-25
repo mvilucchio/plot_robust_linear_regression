@@ -36,7 +36,7 @@ second_multiplier = 0.7
 delta_in, delta_out, percentage, beta = 1.0, 5.0, 0.3, 0.0
 reg_params = [-0.06, -0.03, 0.0, 0.03]
 n_reg_params = len(reg_params)
-alpha = 10.0
+alpha = 2.0
 
 color_zero = (0.0, 0.0, 0.0, 0.8)
 
@@ -166,9 +166,9 @@ for reg_param in reg_params:
 # ax.plot(qs, stability_l1_l2(ms, qs, sigmas, alpha, 1.0, delta_in, delta_out, percentage, beta), label="stability")
 
 ax.set_ylabel(r"$\epsilon_t$")
-ax.set_xlabel(r"$q$")
+ax.set_xlabel(r"$q$", labelpad=0)
 ax.set_xscale("log")
-ax.legend()
+# ax.legend()
 ax.set_ylim([-0.0, 5])
 ax.set_xlim([0.1, 1000])
 ax.grid(zorder=20)
@@ -213,7 +213,6 @@ color_bar = mpl.colorbar.ColorbarBase(
     norm=norm,
     ticks=bounds,
     boundaries=bounds,
-    format="%1i",
 )
 
 tick_locs = reg_params

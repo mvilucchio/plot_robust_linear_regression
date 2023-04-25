@@ -1,113 +1,34 @@
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.lines import Line2D
-from src.utils import load_file
 import src.plotting_utils as pu
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from itertools import product
-from src.optimal_lambda import (
-    optimal_lambda,
-    optimal_reg_param_and_huber_parameter,
-    no_parallel_optimal_reg_param_and_huber_parameter,
-)
-
-from tqdm.auto import tqdm
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.ticker as ticker
 import src.plotting_utils as pu
+import pandas as pd
+from itertools import product
+from robust_regression.sweeps.alpha_sweeps import (
+    sweep_alpha_optimal_lambda_fixed_point,
+    sweep_alpha_optimal_lambda_hub_param_fixed_point,
+)
 
 from scipy.optimize import minimize
-import src.fpeqs as fp
-from src.fpeqs_BO import (
-    var_func_BO,
-    var_hat_func_BO_single_noise,
-    var_hat_func_BO_num_double_noise,
+from robust_regression.fixed_point_equations.fpeqs import fixed_point_finder
+from robust_regression.fixed_point_equations.fpe_BO import (
     var_hat_func_BO_num_decorrelated_noise,
+    var_func_BO,
 )
-from src.fpeqs_L2 import (
-    var_func_L2,
-    var_hat_func_L2_single_noise,
-    var_hat_func_L2_double_noise,
+from robust_regression.fixed_point_equations.fpe_L2_loss import (
     var_hat_func_L2_decorrelated_noise,
 )
-from src.fpeqs_L1 import (
-    var_hat_func_L1_single_noise,
-    var_hat_func_L1_double_noise,
+from robust_regression.fixed_point_equations.fpe_L1_loss import (
     var_hat_func_L1_decorrelated_noise,
 )
-from src.fpeqs_Huber import (
-    var_hat_func_Huber_single_noise,
-    var_hat_func_Huber_double_noise,
+from robust_regression.fixed_point_equations.fpe_Huber_loss import (
     var_hat_func_Huber_decorrelated_noise,
 )
-
-from scipy.special import erf
-
-
-def plateau_L1(D_IN, D_OUT, epsilon, x=0.01, toll=1e-8):
-    err = np.inf
-    while True:
-        y_IN = D_IN + epsilon**2 * x**2
-        y_OUT = D_OUT + (epsilon * x + 1) ** 2
-        x_next = -1 / ((1 - epsilon) * np.sqrt(y_OUT / y_IN) + epsilon)
-        err = np.abs(x_next - x)
-        x = x_next
-        if err < toll:
-            return x
-
-
-def plateau_H(D_IN, D_OUT, epsilon, a, x=0.01, toll=1e-8):
-    err = np.inf
-    while True:
-        y_IN = D_IN + epsilon**2 * x**2
-        y_OUT = D_OUT + (epsilon * x + 1) ** 2
-
-        x_next = -1 / (
-            (1 - epsilon) * erf(a / np.sqrt(2 * y_IN)) / erf(a / np.sqrt(2 * y_OUT)) + epsilon
-        )
-        err = np.abs(x_next - x)
-        x = x_next
-        if err < toll:
-            return x
-
-
-def _find_optimal_reg_param_and_huber_parameter_gen_error(
-    alpha, var_hat_func, initial, var_hat_kwargs, inital_values
-):
-    def minimize_fun(x):
-        reg_param, a = x
-        var_hat_kwargs.update({"a": a})
-        m, q, _ = fp.state_equations(
-            var_func_L2,
-            var_hat_func,
-            reg_param=reg_param,
-            alpha=alpha,
-            init=initial,
-            var_hat_kwargs=var_hat_kwargs,
-        )
-        return 1 + q - 2 * m
-
-    bnds = [(SMALLEST_REG_PARAM, None), (SMALLEST_HUBER_PARAM, None)]
-    obj = minimize(
-        minimize_fun,
-        x0=inital_values,
-        method="Nelder-Mead",
-        bounds=bnds,
-        options={
-            "xatol": XATOL,
-            "fatol": FATOL,
-            "adaptive": True,
-        },
-    )
-    if obj.success:
-        fun_val = obj.fun
-        reg_param_opt, a_opt = obj.x
-        return fun_val, reg_param_opt, a_opt
-    else:
-        raise RuntimeError("Minima could not be found.")
-
+from robust_regression.fixed_point_equations.fpe_L2_regularization import var_func_L2
 
 # remember to put lower bound also in optimal_lambda
 SMALLEST_REG_PARAM = 1e-10
@@ -118,7 +39,7 @@ FATOL = 1e-10
 
 save = True
 experimental_points = True
-width = 4/5 * 1.0 * 458.63788
+width = 4 / 5 * 1.0 * 458.63788
 
 delta_large = 5.0
 beta = 0.0
@@ -132,7 +53,9 @@ tuple_size = pu.set_size(width, fraction=0.50)
 multiplier = 0.9
 second_multiplier = 0.7
 
-fig, ax = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],3/4 * multiplier*tuple_size[0]))
+fig, ax = plt.subplots(
+    1, 1, figsize=(multiplier * tuple_size[0], 3 / 4 * multiplier * tuple_size[0])
+)
 fig.subplots_adjust(left=0.16)
 fig.subplots_adjust(bottom=0.16)
 fig.subplots_adjust(top=0.97)
@@ -249,12 +172,7 @@ lambdas_Huber = data_fp[:, 6]
 huber_params = data_fp[:, 7]
 errors_BO = data_fp[:, 8]
 
-ax.plot(
-    alphas_L2,
-    errors_BO,
-    label="BO",
-    color="tab:red"
-)
+ax.plot(alphas_L2, errors_BO, label="BO", color="tab:red")
 
 dat = np.genfromtxt(
     "./data/FIGURE_1_data_numerics_uncorrelated_bounded.csv",
@@ -361,32 +279,44 @@ while True:
         initial_condition = [m, q, sigma]
         break
 
-_, _, aaa = _find_optimal_reg_param_and_huber_parameter_gen_error(
-    1000000,
-    var_hat_func_Huber_decorrelated_noise,
-    initial_condition,
-    params,
-    [0.01, 1e-4],
-)
+# _, _, aaa = _find_optimal_reg_param_and_huber_parameter_gen_error(
+#     1000000,
+#     var_hat_func_Huber_decorrelated_noise,
+#     initial_condition,
+#     params,
+#     [0.01, 1e-4],
+# )
 
-val_plateau_huber = p**2 * (plateau_H(delta_small, delta_large, p, aaa, x=errors_Huber[-1] / p**2)) ** 2
-val_plateau_L1 = p**2 * (plateau_L1(delta_small, delta_large, p, x=errors_L1[-1] / p**2)) ** 2
+# val_plateau_huber = (
+#     p**2
+#     * (plateau_H(delta_small, delta_large, p, aaa, x=errors_Huber[-1] / p**2)) ** 2
+# )
+# val_plateau_L1 = (
+#     p**2 * (plateau_L1(delta_small, delta_large, p, x=errors_L1[-1] / p**2)) ** 2
+# )
 
-ax.axhline(y=p**2, xmin=0.0, xmax=1, linestyle="dashed", color="tab:blue", alpha=0.75)
-ax.axhline(
-    y=np.abs(val_plateau_huber),
-    xmin=0.0,
-    xmax=1,
-    linestyle="dashed",
-    color="tab:orange",
-    alpha=0.75,
-)
-ax.axhline(
-    y=np.abs(val_plateau_L1), xmin=0.0, xmax=1, linestyle="dashed", color="tab:green", alpha=0.75
-)
+# ax.axhline(y=p**2, xmin=0.0, xmax=1, linestyle="dashed", color="tab:blue", alpha=0.75)
+# ax.axhline(
+#     y=np.abs(val_plateau_huber),
+#     xmin=0.0,
+#     xmax=1,
+#     linestyle="dashed",
+#     color="tab:orange",
+#     alpha=0.75,
+# )
+# ax.axhline(
+#     y=np.abs(val_plateau_L1),
+#     xmin=0.0,
+#     xmax=1,
+#     linestyle="dashed",
+#     color="tab:green",
+#     alpha=0.75,
+# )
 
 # AMP_BO error points
-df = pd.read_csv(f"data/AMP_BO_eps_{p}_beta_{beta}_delta_large_{delta_large}_delta_small_{delta_small}.csv")
+df = pd.read_csv(
+    f"data/AMP_BO_eps_{p}_beta_{beta}_delta_large_{delta_large}_delta_small_{delta_small}.csv"
+)
 ax.errorbar(
     df["alpha"],
     df["mean"],
@@ -422,7 +352,14 @@ if save:
 
 tuple_size = pu.set_size(width, fraction=0.50)
 
-fig_2, ax_2 = plt.subplots(1, 1, figsize=(multiplier*tuple_size[0],second_multiplier*multiplier*tuple_size[1]))
+fig_2, ax_2 = plt.subplots(
+    1,
+    1,
+    figsize=(
+        multiplier * tuple_size[0],
+        second_multiplier * multiplier * tuple_size[1],
+    ),
+)
 # important
 fig_2.subplots_adjust(left=0.16)
 fig_2.subplots_adjust(bottom=0.3)
@@ -431,10 +368,34 @@ fig_2.subplots_adjust(right=0.97)
 fig_2.set_zorder(30)
 ax_2.set_zorder(30)
 
-ax_2.plot(alphas_L2, lambdas_L2, label=r"$\lambda_{\text{opt}}\,\ell_2$", color='tab:blue', linestyle='solid')
-ax_2.plot(alphas_L2, lambdas_L1, label=r"$\lambda_{\text{opt}}\,\ell_1$", color='tab:green', linestyle='solid')
-ax_2.plot(alphas_L2, lambdas_Huber, label=r"$\lambda_{\text{opt}}$ Huber", color='tab:orange', linestyle='solid')
-ax_2.plot(alphas_L2, huber_params, label=r"$a_{\text{opt}}$ Huber", color='tab:gray', linestyle='solid')
+ax_2.plot(
+    alphas_L2,
+    lambdas_L2,
+    label=r"$\lambda_{\text{opt}}\,\ell_2$",
+    color="tab:blue",
+    linestyle="solid",
+)
+ax_2.plot(
+    alphas_L2,
+    lambdas_L1,
+    label=r"$\lambda_{\text{opt}}\,\ell_1$",
+    color="tab:green",
+    linestyle="solid",
+)
+ax_2.plot(
+    alphas_L2,
+    lambdas_Huber,
+    label=r"$\lambda_{\text{opt}}$ Huber",
+    color="tab:orange",
+    linestyle="solid",
+)
+ax_2.plot(
+    alphas_L2,
+    huber_params,
+    label=r"$a_{\text{opt}}$ Huber",
+    color="tab:gray",
+    linestyle="solid",
+)
 
 # ax_2.set_ylabel(r"$a_{\text{opt}}$", labelpad=2.0)
 # ax_2.set_xlabel(r"$\alpha$", labelpad=0.0)
@@ -452,13 +413,13 @@ final_idx_L1 = 1
 final_idx_L2 = 1
 for idx in range(len(alphas_L2)):
     if lambdas_Huber[idx] >= small_value:
-        final_idx_Hub = idx+1
+        final_idx_Hub = idx + 1
 
     if lambdas_L1[idx] >= small_value:
-        final_idx_L1 = idx+1
+        final_idx_L1 = idx + 1
 
     if lambdas_L2[idx] >= small_value:
-        final_idx_L2 = idx+1
+        final_idx_L2 = idx + 1
 
 # ax_2.axvline(x=alphas_L2[final_idx_L2], ymin=0, ymax=1, linestyle="dashed", color='tab:blue', alpha=0.75)
 # ax_2.axvline(x=alphas_L2[final_idx_L1], ymin=0, ymax=1, linestyle="dashed", color='tab:green', alpha=0.75)
